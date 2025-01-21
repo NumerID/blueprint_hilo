@@ -73,17 +73,21 @@ triggers:
     to: appreciation
     id: defi_appreciation
   - trigger: template
-    value_template: {{now() == states('appreciation_time') | as_datetime}}
-    id: defi_appreciation_time
+    value_template: >
+      {{ now() >= as_datetime(states('appreciation_time')) }}
+    id: appreciation_time_reached
   - trigger: template
-    value_template: {{now() == states('pre_heat_time') | as_datetime}}
-    id: defi_pre_heat_time
+    value_template: >
+      {{ now() >= as_datetime(states('pre_heat_time')) }}
+    id: pre_heat_time_reached
   - trigger: template
-    value_template: {{now() == states('reduction_time') | as_datetime}}
-    id: defi_reduction_time
+    value_template: >
+      {{ now() >= as_datetime(states('reduction_time')) }}
+    id: reduction_time_reached
   - trigger: template
-    value_template: {{now() == states('recovery_time') | as_datetime}}
-    id: defi_recovery_time
+    value_template: >
+      {{ now() >= as_datetime(states('recovery_time')) }}
+    id: recovery_time_reached
 actions:
   - choose:
       - conditions:
