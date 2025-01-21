@@ -9,17 +9,17 @@ blueprint:
         target:
           entity:
             domain: climate
-    # temperature_scheduled:
-    #   name: Température Schédulé
-    #   description: Températion à configrer lorsque le sensor.defi_hilo est dans le statut scheduled.
-    #   selector:
-    #     number:
-    #       min: 15
-    #       max: 25
-    #       unit_of_measurement: celcius
+    temperature_scheduled:
+      name: Température Schédulé
+      description: Température à configurer lorsque le sensor.defi_hilo est dans le statut scheduled.
+      selector:
+        number:
+          min: 15
+          max: 25
+          unit_of_measurement: celcius
     temperature_appreciation:
       name: Température lors des périodes d'ancrage
-      description: Températion à configrer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
+      description: Température à configurer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
       selector:
         number:
           min: 15
@@ -27,7 +27,7 @@ blueprint:
           unit_of_measurement: celcius      
     temperature_pre_heat:
       name: Température de Pré Chauffage
-      description: Températion à configrer lorsque le sensor.defi_hilo est dans le statut pre_heat. C'est la température à monter la maison avant le début du défi.
+      description: Température à configurer lorsque le sensor.defi_hilo est dans le statut pre_heat. C'est la température à monter la maison avant le début du défi.
       selector:
         number:
           min: 15
@@ -35,7 +35,7 @@ blueprint:
           unit_of_measurement: celcius
     temperature_reduction:
       name: Température lors du défi
-      description: Températion à configrer lorsque le sensor.defi_hilo est dans le statut reduction. C'est la température à descendre la maison lors du début du défi.
+      description: Température à configurer lorsque le sensor.defi_hilo est dans le statut reduction. C'est la température à descendre la maison lors du début du défi.
       selector:
         number:
           min: 15
@@ -43,7 +43,7 @@ blueprint:
           unit_of_measurement: celcius
     temperature_recovery:
       name: Température de retour à la normale
-      description: Températion à configrer lorsque le sensor.defi_hilo est dans le statut recovery. C'est la température de retour à la normale après le défi.
+      description: Température à configurer lorsque le sensor.defi_hilo est dans le statut recovery. C'est la température de retour à la normale après le défi.
       selector:
         number:
           min: 15
@@ -110,6 +110,14 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
+              temperature: "{{ temperature_pre_heat_state }}"
+            target: !input thermostats_defi
+      - conditions:
+          - condition: trigger
+            id: defi_pre_heat_time
+        sequence:
+          - action: climate.set_temperature
+            data:
               temperature: "{{ states[temperature_pre_heat_state].state | int}}"
             target:
               entity_id: 
@@ -127,6 +135,14 @@ actions:
       - conditions:
           - condition: trigger
             id: defi_reduction
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ temperature_reduction_state }}"
+            target: !input thermostats_defi
+      - conditions:
+          - condition: trigger
+            id: defi_reduction_time
         sequence:
           - action: climate.set_temperature
             data:
@@ -150,6 +166,14 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
+              temperature: "{{ temperature_recovery_state }}"
+            target: !input thermostats_defi
+      - conditions:
+          - condition: trigger
+            id: defi_recovery_time
+        sequence:
+          - action: climate.set_temperature
+            data:
               temperature: "{{ states[temperature_recovery_state].state | int}}"
             target:
               entity_id: 
@@ -166,7 +190,7 @@ actions:
                 - !input thermostats_defi
       - conditions:
           - condition: trigger
-            id: defi_apprication
+            id: defi_appreciation
         sequence:
           - action: climate.set_temperature
             data:
@@ -184,3 +208,11 @@ actions:
             target:
               entity_id: 
                 - !input thermostats_defi
+      - conditions:
+          - condition: trigger
+            id: defi_apprication_time
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ temperature_appreciation_state }}"
+            target: !input thermostats_defi
