@@ -9,14 +9,14 @@ blueprint:
         target:
           entity:
             domain: climate
-    temperature_scheduled:
-      name: Température Schédulé
-      description: Températion à configrer lorsque le sensor.defi_hilo est dans le statut scheduled.
-      selector:
-        number:
-          min: 15
-          max: 25
-          unit_of_measurement: celcius
+    # temperature_scheduled:
+    #   name: Température Schédulé
+    #   description: Températion à configrer lorsque le sensor.defi_hilo est dans le statut scheduled.
+    #   selector:
+    #     number:
+    #       min: 15
+    #       max: 25
+    #       unit_of_measurement: celcius
     temperature_appreciation:
       name: Température lors des périodes d'ancrage
       description: Températion à configrer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
@@ -50,11 +50,16 @@ blueprint:
           max: 25
           unit_of_measurement: celcius    
 variables:
-  temperature_scheduled_state: !input temperature_scheduled
+  # temperature_scheduled_state: !input temperature_scheduled
   temperature_appreciation_state: !input temperature_appreciation
   temperature_pre_heat_state: !input temperature_pre_heat
   temperature_reduction_state: !input temperature_reduction
-  temperature_recovery_state: !input temperature_recovery  
+  temperature_recovery_state: !input temperature_recovery
+  appreciation_time: null
+  pre_heat_time: null
+  reduction_time: null
+  recovery_time: null
+
 triggers:
   - trigger: state
     entity_id: sensor.defi_hilo
@@ -76,21 +81,42 @@ triggers:
     entity_id: sensor.defi_hilo
     to: appreciation
     id: defi_appreciation
+  - trigger: template
+    value_template: {{now() >= states('appreciation_time') | as_datetime}}
+    id: defi_appreciation_time
+  - trigger: template
+    value_template: {{now() >= states('pre_heat_time') | as_datetime}}
+    id: defi_pre_heat_time
+  - trigger: template
+    value_template: {{now() >= states('reduction_time') | as_datetime}}
+    id: defi_reduction_time
+  - trigger: template
+    value_template: {{now() >= states('recovery_time') | as_datetime}}
+    id: defi_recovery_time
 actions:
   - choose:
       - conditions:
           - condition: trigger
             id: defi_scheduled
         sequence:
+          - variables:
+              appreciation_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.appreciation_start | as_datetime }}"
+              pre_heat_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.preheat_start | as_datetime }}"
+              reduction_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.reduction_start | as_datetime }}"
+              recovery_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_start | as_datetime }}"          
+      - conditions:
+          - condition: trigger
+            id: defi_pre_heat
+        sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_scheduled_state].state | int}}"
+              temperature: "{{ states[temperature_pre_heat_state].state | int}}"
             target:
               entity_id: 
                 - !input thermostats_defi
       - conditions:
           - condition: trigger
-            id: defi_pre_heat
+            id: defi_pre_heat_time
         sequence:
           - action: climate.set_temperature
             data:
@@ -110,6 +136,16 @@ actions:
                 - !input thermostats_defi
       - conditions:
           - condition: trigger
+            id: defi_reduction_time
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ states[temperature_reduction_state].state | int}}"
+            target:
+              entity_id: 
+                - !input thermostats_defi
+      - conditions:
+          - condition: trigger
             id: defi_recovery
         sequence:
           - action: climate.set_temperature
@@ -120,7 +156,27 @@ actions:
                 - !input thermostats_defi
       - conditions:
           - condition: trigger
+            id: defi_recovery_time
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ states[temperature_recovery_state].state | int}}"
+            target:
+              entity_id: 
+                - !input thermostats_defi
+      - conditions:
+          - condition: trigger
             id: defi_apprication
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ states[temperature_appreciation_state].state | int}}"
+            target:
+              entity_id: 
+                - !input thermostats_defi
+      - conditions:
+          - condition: trigger
+            id: defi_apprication_time
         sequence:
           - action: climate.set_temperature
             data:
