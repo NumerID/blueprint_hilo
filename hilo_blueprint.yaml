@@ -34,22 +34,32 @@ blueprint:
           max: 25
           unit_of_measurement: celcius
     temperature_recovery:
-      name: Température de retour à la normale
-      description: Température à configurer lorsque le sensor.defi_hilo est dans le statut recovery. C'est la température de retour à la normale après le défi.
+      name: Température de la phase de reprise
+      description: Température à configurer lorsque le sensor.defi_hilo est dans le statut recovery. C'est la température de retour à la normale progressif après le défi. Il est important de ne pas revenir tout de suite à la température normale tout de suite après le défi.
       selector:
         number:
           min: 15
           max: 25
-          unit_of_measurement: celcius    
+          unit_of_measurement: celcius
+    temperature_completed:
+      name: Température de retour à la normale
+      description: Température à configurer lorsque le sensor.defi_hilo est dans le statut completed. C'est la température de retour à la normale.
+      selector:
+        number:
+          min: 15
+          max: 25
+          unit_of_measurement: celcius       
 variables:  
   temperature_appreciation_state: !input temperature_appreciation
   temperature_pre_heat_state: !input temperature_pre_heat
   temperature_reduction_state: !input temperature_reduction
   temperature_recovery_state: !input temperature_recovery
+  temperature_completed_state: !input temperature_completed
   appreciation_time: null
   pre_heat_time: null
   reduction_time: null
   recovery_time: null
+  completed_time: null
 
 triggers:
   - trigger: state
@@ -72,6 +82,10 @@ triggers:
     entity_id: sensor.defi_hilo
     to: appreciation
     id: defi_appreciation
+  - trigger: state
+    entity_id: sensor.defi_hilo
+    to: completed
+    id: defi_completed
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('appreciation_time')) }}
@@ -88,6 +102,10 @@ triggers:
     value_template: >
       {{ now() >= as_datetime(states('recovery_time')) }}
     id: recovery_time_reached
+  - trigger: template
+    value_template: >
+      {{ now() >= as_datetime(states('completed_time')) }}
+    id: completed_time_reached
 actions:
   - choose:
       - conditions:
@@ -98,7 +116,8 @@ actions:
               appreciation_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.appreciation_start | as_datetime }}"
               pre_heat_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.preheat_start | as_datetime }}"
               reduction_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.reduction_start | as_datetime }}"
-              recovery_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_start | as_datetime }}"          
+              recovery_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_start | as_datetime }}" 
+              completed_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_end | as_datetime }}"         
       - conditions:
           - condition: trigger
             id: defi_pre_heat
@@ -194,4 +213,20 @@ actions:
           - action: climate.set_temperature
             data:
               temperature: "{{ temperature_appreciation_state }}"
+            target: !input thermostats_defi
+      - conditions:
+          - condition: trigger
+            id: defi_completed
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ temperature_completed_state }}"
+            target: !input thermostats_defi
+      - conditions:
+          - condition: trigger
+            id: defi_completed_time
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ states[temperature_completed_state].state | int}}"
             target: !input thermostats_defi
