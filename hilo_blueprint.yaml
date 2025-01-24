@@ -9,7 +9,15 @@ blueprint:
       selector:
         target:
           entity:
-            domain: climate    
+            domain: climate
+    switchs_defi:
+      name: Switchs Défi
+      description: Les switchs à configurer lors des différents statuts du sensor.defi_hilo.
+      selector:
+        target:
+          entity:
+            domain: switch
+      default: []    
     temperature_appreciation:
       name: Température lors des périodes d'ancrage
       description: Température à configurer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
@@ -151,6 +159,8 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: !input thermostats_defi
+          - action: switch.turn_off
+            target: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_reduction_time
@@ -159,14 +169,8 @@ actions:
             data:
               temperature: "{{ states[temperature_reduction_state].state | int}}"
             target: !input thermostats_defi
-      - conditions:
-          - condition: trigger
-            id: defi_reduction_time
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ states[temperature_reduction_state].state | int}}"
-            target: !input thermostats_defi
+          - action: switch.turn_off
+            target: !input switchs_defi      
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -175,6 +179,8 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
+          - action: switch.turn_on
+            target: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_recovery_time
@@ -183,6 +189,8 @@ actions:
             data:
               temperature: "{{ states[temperature_recovery_state].state | int}}"
             target: !input thermostats_defi
+          - action: switch.turn_on
+            target: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_recovery_time
