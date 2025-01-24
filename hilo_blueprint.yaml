@@ -161,7 +161,7 @@ actions:
             target: !input thermostats_defi
           - action: switch.turn_off
             target: 
-              entity: !input switchs_defi
+              entity_id: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_reduction_time
@@ -172,7 +172,7 @@ actions:
             target: !input thermostats_defi
           - action: switch.turn_off
             target: 
-              entity: !input switchs_defi      
+              entity_id: !input switchs_defi      
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -183,7 +183,7 @@ actions:
             target: !input thermostats_defi
           - action: switch.turn_on
             target: 
-              entity: !input switchs_defi
+              entity_id: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_recovery_time
@@ -194,7 +194,7 @@ actions:
             target: !input thermostats_defi
           - action: switch.turn_on
             target: 
-              entity: !input switchs_defi
+              entity_id: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_recovery_time
