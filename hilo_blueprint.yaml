@@ -160,7 +160,8 @@ actions:
               temperature: "{{ temperature_reduction_state }}"
             target: !input thermostats_defi
           - action: switch.turn_off
-            target: !input switchs_defi
+            target: 
+              entity: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_reduction_time
@@ -170,7 +171,8 @@ actions:
               temperature: "{{ states[temperature_reduction_state].state | int}}"
             target: !input thermostats_defi
           - action: switch.turn_off
-            target: !input switchs_defi      
+            target: 
+              entity: !input switchs_defi      
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -180,7 +182,8 @@ actions:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
           - action: switch.turn_on
-            target: !input switchs_defi
+            target: 
+              entity: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_recovery_time
@@ -190,7 +193,8 @@ actions:
               temperature: "{{ states[temperature_recovery_state].state | int}}"
             target: !input thermostats_defi
           - action: switch.turn_on
-            target: !input switchs_defi
+            target: 
+              entity: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_recovery_time
