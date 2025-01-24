@@ -228,6 +228,7 @@ actions:
             - conditions:
                 - "{{ fans_defi is defined and fans_defi | lenght > 0 }}"
               action: fan.turn_on
+              target: !input fans_defi
       - conditions:
           - condition: trigger
             id: defi_recovery_time
