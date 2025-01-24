@@ -9,7 +9,14 @@ blueprint:
       selector:
         target:
           entity:
-            domain: climate    
+            domain: climate
+    switchs_defi:
+      name: Switchs Défi
+      description: Les switchs à configurer lors des différents statuts du sensor.defi_hilo. Vous pouvez éteindre des appareils électriques lors du défi et les rallumer lors de la phase de reprise.
+      selector:
+        target:
+          entity:
+            domain: switch 
     temperature_appreciation:
       name: Température lors des périodes d'ancrage
       description: Température à configurer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
@@ -167,6 +174,8 @@ actions:
             data:
               temperature: "{{ states[temperature_reduction_state].state | int}}"
             target: !input thermostats_defi
+          - action: switch.turn_off
+            target: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -175,6 +184,8 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
+          - action: switch.turn_on
+            target: !input switchs_defi
       - conditions:
           - condition: trigger
             id: defi_recovery_time
