@@ -5,35 +5,10 @@ blueprint:
   input:
     thermostats_defi:
       name: Thermostats Défi
-      description: Les thermostats à configurer lors des différents statuts du sensor.defi_hilo.
       selector:
         target:
           entity:
-            domain: climate
-    switchs_defi:
-      name: Switchs Défi
-      description: Les switchs à configurer lors des différents statuts du sensor.defi_hilo. Vous pouvez éteindre des appareils électriques lors du défi et les rallumer lors de la phase de reprise.
-      selector:
-        target:
-          entity:
-            domain: switch
-      default: []    
-    lights_defi:
-      name: Lumières Défi
-      description: Les lumières à configurer lors des différents statuts du sensor.defi_hilo. Vous pouvez éteindre des lumières lors du défi et les rallumer lors de la phase de reprise.
-      selector:
-        target:
-          entity:
-            domain: light
-      default: []     
-    fans_defi:
-      name: Ventilateurs Défi
-      description: Les ventilateurs à configurer lors des différents statuts du sensor.defi_hilo. Vous pouvez éteindre des ventilateurs lors du défi et les rallumer lors de la phase de reprise.
-      selector:
-        target:
-          entity:
-            domain: fan
-      default: []    
+            domain: climate    
     temperature_appreciation:
       name: Température lors des périodes d'ancrage
       description: Température à configurer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
@@ -191,21 +166,6 @@ actions:
             data:
               temperature: "{{ states[temperature_reduction_state].state | int}}"
             target: !input thermostats_defi
-          - choose:
-            - conditions:
-                - "{{ switchs_defi is defined and switchs_defi | lenght > 0 }}"
-              action: switch.turn_off
-              target: !input switchs_defi
-          - choose:
-            - conditions:
-                - "{{ lights_defi is defined and lights_defi | lenght > 0 }}"
-              action: light.turn_off
-              target: !input lights_defi
-          - choose:
-            - conditions:
-                - "{{ fans_defi is defined and fans_defi | lenght > 0 }}"
-              action: fan.turn_off
-              target: !input fans_defi
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -214,21 +174,6 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
-          - choose:
-            - conditions:
-                - "{{ switchs_defi is defined and switchs_defi | lenght > 0 }}"
-              action: switch.turn_on
-              target: !input switchs_defi
-          - choose:
-            - conditions:
-                - "{{ lights_defi is defined and lights_defi | lenght > 0 }}"
-              action: light.turn_on
-              target: !input lights_defi
-          - choose:
-            - conditions:
-                - "{{ fans_defi is defined and fans_defi | lenght > 0 }}"
-              action: fan.turn_on
-              target: !input fans_defi
       - conditions:
           - condition: trigger
             id: defi_recovery_time
