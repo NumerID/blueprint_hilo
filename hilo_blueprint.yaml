@@ -191,12 +191,21 @@ actions:
             data:
               temperature: "{{ states[temperature_reduction_state].state | int}}"
             target: !input thermostats_defi
-          - action: switch.turn_off
-            target: !input switchs_defi
-          - action: light.turn_off
-            target: !input lights_defi
-          - action: fan.turn_off
-            target: !input fans_defi
+          - choose:
+            - conditions:
+                - "{{ switchs_defi is defined }}"
+              action: switch.turn_off
+              target: !input switchs_defi
+          - choose:
+            - conditions:
+                - "{{ lights_defi is defined }}"
+              action: light.turn_off
+              target: !input lights_defi
+          - choose:
+            - conditions:
+                - "{{ fans_defi is defined }}"
+              action: fan.turn_off
+              target: !input fans_defi
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -205,12 +214,20 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
-          - action: switch.turn_on
-            target: !input switchs_defi
-          - action: light.turn_on
-            target: !input lights_defi
-          - action: fan.turn_on
-            target: !input fans_defi
+          - choose:
+            - conditions:
+                - "{{ switchs_defi is defined }}"
+              action: switch.turn_on
+              target: !input switchs_defi
+          - choose:
+            - conditions:
+                - "{{ lights_defi is defined }}"
+              action: light.turn_on
+              target: !input lights_defi
+          - choose:
+            - conditions:
+                - "{{ fans_defi is defined }}"
+              action: fan.turn_on
       - conditions:
           - condition: trigger
             id: defi_recovery_time
