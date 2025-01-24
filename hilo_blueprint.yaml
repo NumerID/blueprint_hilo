@@ -5,6 +5,7 @@ blueprint:
   input:
     thermostats_defi:
       name: Thermostats Défi
+      description: Les thermostats à configurer lors des différents statuts du sensor.defi_hilo.
       selector:
         target:
           entity:
