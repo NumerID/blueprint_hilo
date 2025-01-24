@@ -194,10 +194,13 @@ actions:
             target: !input thermostats_defi
           - action: switch.turn_off
             target: 
-              entity_id: !input switchs_defi
+              entity_id: "{{ input.switchs_defi }}"
           - action: light.turn_off
             target: 
-              entity_id: !input light_defi      
+              entity_id: "{{ input.light_defi }}"
+          - action: fan.turn_off
+            target: 
+              entity_id: "{{ input.fan_defi }}"     
       - conditions:
           - condition: trigger
             id: defi_recovery
