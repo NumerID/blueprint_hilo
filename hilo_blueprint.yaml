@@ -191,7 +191,8 @@ actions:
           - action: climate.set_temperature
             data:
               temperature: "{{ states[temperature_reduction_state].state | int}}"
-            target: !input thermostats_defi
+            target: 
+              entity_id: "{{ input.thermostats_defi }}"
           - action: switch.turn_off
             target: 
               entity_id: "{{ input.switchs_defi }}"
