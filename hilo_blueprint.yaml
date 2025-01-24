@@ -16,7 +16,7 @@ blueprint:
       selector:
         target:
           entity:
-            integration: ''
+            domain: switch
     temperature_appreciation:
       name: Température lors des périodes d'ancrage
       description: Température à configurer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
