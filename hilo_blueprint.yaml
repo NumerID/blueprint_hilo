@@ -155,7 +155,7 @@ actions:
             data:
               temperature: "{{ temperature_pre_heat_state }}"
             target: 
-              entity_id: "{{ thermostat_list }}"
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_pre_heat_time
@@ -164,7 +164,7 @@ actions:
             data:
               temperature: "{{ temperature_pre_heat_state }}"
             target: 
-              entity_id: "{{ thermostat_list }}"      
+              entity_id: !input thermostats_defi      
       - conditions:
           - condition: trigger
             id: defi_reduction
@@ -173,7 +173,7 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: 
-              entity_id: "{{ thermostat_list }}"
+              entity_id: !input thermostats_defi
           - action: switch.turn_off
             target: 
               entity_id: "{{ switch_list }}"
@@ -191,7 +191,7 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: 
-              entity_id: "{{ thermostat_list }}"
+              entity_id: !input thermostats_defi
           - action: switch.turn_off
             target: 
               entity_id: "{{ switch_list }}"
@@ -209,7 +209,7 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: 
-              entity_id: "{{ thermostat_list }}"
+              entity_id: !input thermostats_defi
           - action: switch.turn_on
             target: 
               entity_id: "{{ switch_list }}"
@@ -227,7 +227,7 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: 
-              entity_id: "{{ thermostat_list }}"
+              entity_id: !input thermostats_defi
           - action: switch.turn_on
             target: 
               entity_id: "{{ switch_list }}"
@@ -245,7 +245,7 @@ actions:
             data:
               temperature: "{{ temperature_appreciation_state }}"
             target: 
-              entity_id: "{{ thermostat_list }}"      
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_apprication_time
@@ -254,7 +254,7 @@ actions:
             data:
               temperature: "{{ temperature_appreciation_state }}"
             target: 
-              entity_id: "{{ thermostat_list }}"
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_completed
@@ -263,7 +263,7 @@ actions:
             data:
               temperature: "{{ temperature_completed_state }}"
             target:   
-              entity_id: "{{ thermostat_list }}"
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_completed_time
@@ -272,4 +272,4 @@ actions:
             data:
               temperature: "{{ temperature_completed_state }}"
             target: 
-              entity_id: "{{ thermostat_list }}"
+              entity_id: !input thermostats_defi
