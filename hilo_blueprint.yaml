@@ -172,15 +172,15 @@ actions:
               temperature: "{{ temperature_reduction_state }}"
             target: !input thermostats_defi
           - choose:
-            - conditions: "{{ !input switchs_defi | count > 0 }}"
+            - conditions: "{{ switch_list | count > 0 }}"
               sequence:
                 - service: switch.turn_off
                   target: !input switchs_defi
-            - conditions: "{{ !input light_defi | count > 0 }}"
+            - conditions: "{{ light_list | count > 0 }}"
               sequence:
               - service: light.turn_off
                 target: !input light_defi
-            - conditions: "{{ !input fan_defi | count > 0 }}"
+            - conditions: "{{ fan_list | count > 0 }}"
               sequence:
               - service: fan.turn_off
                 target: !input fan_defi   
@@ -193,15 +193,15 @@ actions:
               temperature: "{{ temperature_reduction_state }}"
             target: !input thermostats_defi
           - choose:
-            - conditions: "{{ !input switchs_defi | count > 0 }}"
+            - conditions: "{{ switch_list | count > 0 }}"
               sequence:
                 - service: switch.turn_off
                   target: !input switchs_defi
-            - conditions: "{{ !input light_defi | count > 0 }}"
+            - conditions: "{{ light_list | count > 0 }}"
               sequence:
               - service: light.turn_off
                 target: !input light_defi
-            - conditions: "{{ !input fan_defi | count > 0 }}"
+            - conditions: "{{ fan_list | count > 0 }}"
               sequence:
               - service: fan.turn_off
                 target: !input fan_defi    
@@ -214,15 +214,15 @@ actions:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
           - choose:
-            - conditions: "{{ !input switchs_defi | count > 0 }}"
+            - conditions: "{{ switch_list | count > 0 }}"
               sequence:
                 - service: switch.turn_on
                   target: !input switchs_defi
-            - conditions: "{{ !input light_defi | count > 0 }}"
+            - conditions: "{{ light_list | count > 0 }}"
               sequence:
               - service: light.turn_on
                 target: !input light_defi
-            - conditions: "{{ !input fan_defi | count > 0 }}"
+            - conditions: "{{ fan_list | count > 0 }}"
               sequence:
               - service: fan.turn_on
                 target: !input fan_defi    
@@ -235,15 +235,15 @@ actions:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
           - choose:
-            - conditions: "{{ !input switchs_defi | count > 0 }}"
+            - conditions: "{{ switch_list | count > 0 }}"
               sequence:
                 - service: switch.turn_on
                   target: !input switchs_defi
-            - conditions: "{{ !input light_defi | count > 0 }}"
+            - conditions: "{{ light_list | count > 0 }}"
               sequence:
               - service: light.turn_on
                 target: !input light_defi
-            - conditions: "{{ !input fan_defi | count > 0 }}"
+            - conditions: "{{ fan_list | count > 0 }}"
               sequence:
               - service: fan.turn_on
                 target: !input fan_defi    
