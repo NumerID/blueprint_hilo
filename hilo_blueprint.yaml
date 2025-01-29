@@ -5,14 +5,14 @@ blueprint:
   input:
     thermostats_defi:
       name: Thermostats Défi
-      description: Les thermostats à configurer lors des différents statuts du sensor.defi_hilo.
+      description: Les thermostats à configurer lors des différents statuts du sensor.defi_hilo. 
       selector:
         target:
           entity:
             domain: climate
     switchs_defi:
       name: Switchs Défi
-      description: Les switchs à configurer lors des différents statuts du sensor.defi_hilo.
+      description: Les switchs à configurer lors des différents statuts du sensor.defi_hilo. Elles vont être éteintes lors du début du défi et allumées lors de la phase de reprise.
       selector:
         target:
           entity:
@@ -20,7 +20,7 @@ blueprint:
       default: {}
     light_defi:
       name: Lumières Défi
-      description: Les lumières à configurer lors des différents statuts du sensor.defi_hilo.
+      description: Les lumières à configurer lors des différents statuts du sensor.defi_hilo. Elles vont être éteintes lors du début du défi et allumées lors de la phase de reprise.
       selector:
         target:
           entity:
@@ -28,7 +28,7 @@ blueprint:
       default: {}
     fan_defi:
       name: Ventilateurs Défi
-      description: Les ventilateurs à configurer lors des différents statuts du sensor.defi_hilo.
+      description: Les ventilateurs à configurer lors des différents statuts du sensor.defi_hilo. Ils vont être éteints lors du début du défi et allumés lors de la phase de reprise.
       selector:
         target:
           entity:
