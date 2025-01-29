@@ -133,16 +133,8 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_pre_heat_state].state | int}}"
-            target: !input thermostats_defi
-      - conditions:
-          - condition: trigger
-            id: defi_pre_heat_time
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ states[temperature_pre_heat_state].state | int}}"
-            target: !input thermostats_defi
+              temperature: "{{ temperature_pre_heat_state }}"
+            target: !input thermostats_defi      
       - conditions:
           - condition: trigger
             id: defi_reduction
@@ -157,16 +149,8 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_reduction_state].state | int}}"
-            target: !input thermostats_defi
-      - conditions:
-          - condition: trigger
-            id: defi_reduction_time
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ states[temperature_reduction_state].state | int}}"
-            target: !input thermostats_defi
+              temperature: "{{ temperature_reduction_state }}"
+            target: !input thermostats_defi      
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -181,32 +165,16 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_recovery_state].state | int}}"
-            target: !input thermostats_defi
-      - conditions:
-          - condition: trigger
-            id: defi_recovery_time
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ states[temperature_recovery_state].state | int}}"
-            target: !input thermostats_defi
+              temperature: "{{ temperature_recovery_state }}"
+            target: !input thermostats_defi      
       - conditions:
           - condition: trigger
             id: defi_appreciation
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_appreciation_state].state | int}}"
-            target: !input thermostats_defi
-      - conditions:
-          - condition: trigger
-            id: defi_apprication_time
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ states[temperature_appreciation_state].state | int}}"
-            target: !input thermostats_defi
+              temperature: "{{ temperature_appreciation_state}}"
+            target: !input thermostats_defi     
       - conditions:
           - condition: trigger
             id: defi_apprication_time
@@ -229,5 +197,5 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_completed_state].state | int}}"
+              temperature: "{{ temperature_completed_state }}"
             target: !input thermostats_defi
