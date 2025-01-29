@@ -80,6 +80,10 @@ variables:
   temperature_reduction_state: !input temperature_reduction
   temperature_recovery_state: !input temperature_recovery
   temperature_completed_state: !input temperature_completed
+  thermostat_list: !input thermostats_defi
+  switch_list: !input switchs_defi
+  light_list: !input light_defi
+  fan_list: !input fan_defi
   appreciation_time: null
   pre_heat_time: null
   reduction_time: null
@@ -151,7 +155,7 @@ actions:
             data:
               temperature: "{{ temperature_pre_heat_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ thermostat_list }}"
       - conditions:
           - condition: trigger
             id: defi_pre_heat_time
@@ -160,7 +164,7 @@ actions:
             data:
               temperature: "{{ temperature_pre_heat_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"      
+              entity_id: "{{ thermostat_list }}"      
       - conditions:
           - condition: trigger
             id: defi_reduction
@@ -169,16 +173,16 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ thermostat_list }}"
           - action: switch.turn_off
             target: 
-              entity_id: "{{ input.switchs_defi }}"
+              entity_id: "{{ switch_list }}"
           - action: light.turn_off
             target: 
-              entity_id: "{{ input.light_defi }}"
+              entity_id: "{{ light_list }}"
           - action: fan.turn_off
             target: 
-              entity_id: "{{ input.fan_defi }}"
+              entity_id: "{{ fan_list }}"
       - conditions:
           - condition: trigger
             id: defi_reduction_time
@@ -187,16 +191,16 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ thermostat_list }}"
           - action: switch.turn_off
             target: 
-              entity_id: "{{ input.switchs_defi }}"
+              entity_id: "{{ switch_list }}"
           - action: light.turn_off
             target: 
-              entity_id: "{{ input.light_defi }}"
+              entity_id: "{{ light_list }}"
           - action: fan.turn_off
             target: 
-              entity_id: "{{ input.fan_defi }}"     
+              entity_id: "{{ fan_list }}"     
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -205,16 +209,16 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ thermostat_list }}"
           - action: switch.turn_on
             target: 
-              entity_id: "{{ input.switchs_defi }}"
+              entity_id: "{{ switch_list }}"
           - action: light.turn_on
             target: 
-              entity_id: "{{ input.light_defi }}"
+              entity_id: "{{ light_list }}"
           - action: fan.turn_on
             target: 
-              entity_id: "{{ input.fan_defi }}"
+              entity_id: "{{ fan_list }}"
       - conditions:
           - condition: trigger
             id: defi_recovery_time
@@ -223,16 +227,16 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ thermostat_list }}"
           - action: switch.turn_on
             target: 
-              entity_id: "{{ input.switchs_defi }}"
+              entity_id: "{{ switch_list }}"
           - action: light.turn_on
             target: 
-              entity_id: "{{ input.light_defi }}"
+              entity_id: "{{ light_list }}"
           - action: fan.turn_on
             target: 
-              entity_id: "{{ input.fan_defi }}"      
+              entity_id: "{{ fan_list }}"      
       - conditions:
           - condition: trigger
             id: defi_appreciation
@@ -241,7 +245,7 @@ actions:
             data:
               temperature: "{{ temperature_appreciation_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"      
+              entity_id: "{{ thermostat_list }}"      
       - conditions:
           - condition: trigger
             id: defi_apprication_time
@@ -250,7 +254,7 @@ actions:
             data:
               temperature: "{{ temperature_appreciation_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ thermostat_list }}"
       - conditions:
           - condition: trigger
             id: defi_completed
@@ -259,7 +263,7 @@ actions:
             data:
               temperature: "{{ temperature_completed_state }}"
             target:   
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ thermostat_list }}"
       - conditions:
           - condition: trigger
             id: defi_completed_time
@@ -268,4 +272,4 @@ actions:
             data:
               temperature: "{{ temperature_completed_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ thermostat_list }}"
