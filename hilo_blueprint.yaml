@@ -276,7 +276,7 @@ actions:
               entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
-            id: defi_apprication_time
+            id: defi_appreciation_time
         sequence:
           - action: climate.set_temperature
             data:
