@@ -154,8 +154,7 @@ actions:
           - action: climate.set_temperature
             data:
               temperature: "{{ temperature_pre_heat_state }}"
-            target: 
-              entity_id: !input thermostats_defi
+            target: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_pre_heat_time
