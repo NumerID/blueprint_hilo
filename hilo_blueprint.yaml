@@ -26,14 +26,14 @@ blueprint:
           entity:
             domain: light
       default: {}
-    # fan_defi:
-    #   name: Ventilateurs Défi
-    #   description: Les ventilateurs à configurer lors des différents statuts du sensor.defi_hilo.
-    #   selector:
-    #     target:
-    #       entity:
-    #         domain: fan
-    #   default: []    
+    fan_defi:
+      name: Ventilateurs Défi
+      description: Les ventilateurs à configurer lors des différents statuts du sensor.defi_hilo.
+      selector:
+        target:
+          entity:
+            domain: fan
+      default: {}
     temperature_appreciation:
       name: Température lors des périodes d'ancrage
       description: Température à configurer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
@@ -83,7 +83,7 @@ variables:
   thermostat_list: !input thermostats_defi
   switch_list: !input switchs_defi
   light_list: !input light_defi
-  # fan_list: !input fan_defi
+  fan_list: !input fan_defi
   appreciation_time: null
   pre_heat_time: null
   reduction_time: null
@@ -180,10 +180,10 @@ actions:
               sequence:
               - action: light.turn_off
                 target: !input light_defi
-            # - conditions: "{{ fan_list | count > 0 }}"
-            #   sequence:
-            #   - service: fan.turn_off
-            #     target: !input fan_defi   
+            - conditions: "{{ fan_list | count > 0 }}"
+              sequence:
+              - service: fan.turn_off
+                target: !input fan_defi   
       - conditions:
           - condition: trigger
             id: defi_reduction_time
@@ -201,10 +201,10 @@ actions:
               sequence:
               - action: light.turn_off
                 target: !input light_defi
-            # - conditions: "{{ fan_list | count > 0 }}"
-            #   sequence:
-            #   - service: fan.turn_off
-            #     target: !input fan_defi    
+            - conditions: "{{ fan_list | count > 0 }}"
+              sequence:
+              - service: fan.turn_off
+                target: !input fan_defi    
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -222,10 +222,10 @@ actions:
               sequence:
               - service: light.turn_on
                 target: !input light_defi
-            # - conditions: "{{ fan_list | count > 0 }}"
-            #   sequence:
-            #   - service: fan.turn_on
-            #     target: !input fan_defi    
+            - conditions: "{{ fan_list | count > 0 }}"
+              sequence:
+              - service: fan.turn_on
+                target: !input fan_defi    
       - conditions:
         - condition: trigger
           id: defi_recovery_time
@@ -243,10 +243,10 @@ actions:
               sequence:
               - service: light.turn_on
                 target: !input light_defi
-            # - conditions: "{{ fan_list | count > 0 }}"
-            #   sequence:
-            #   - service: fan.turn_on
-            #     target: !input fan_defi    
+            - conditions: "{{ fan_list | count > 0 }}"
+              sequence:
+              - service: fan.turn_on
+                target: !input fan_defi    
       - conditions:
           - condition: trigger
             id: defi_appreciation
