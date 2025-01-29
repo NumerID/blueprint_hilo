@@ -155,7 +155,7 @@ actions:
             data:
               temperature: "{{ temperature_pre_heat_state }}"
             target: 
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_pre_heat_time
@@ -164,7 +164,7 @@ actions:
             data:
               temperature: "{{ temperature_pre_heat_state }}"
             target: 
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_reduction
@@ -173,16 +173,23 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: 
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
-          - action: switch.turn_off
-            target: 
-              entity_id: "{{ expand(switch_list) | map(attribute='entity_id') | list }}"
-          - action: light.turn_off
-            target: 
-              entity_id: "{{ expand(light_list) | map(attribute='entity_id') | list }}"
-          - action: fan.turn_off
-            target: 
-              entity_id: "{{ expand(fan_list) | map(attribute='entity_id') | list }}"
+              entity_id: !input thermostats_defi
+          - choose:
+            - conditions: "{{ !input switchs_defi | count > 0 }}"
+              sequence:
+                - service: switch.turn_off
+                  target:
+                    entity_id: !input switchs_defi
+            - conditions: "{{ !input light_defi | count > 0 }}"
+              sequence:
+              - service: light.turn_off
+                target:
+                  entity_id: !input light_defi
+            - conditions: "{{ !input fan_defi | count > 0 }}"
+              sequence:
+              - service: fan.turn_off
+                target:
+                  entity_id: !input fan_defi   
       - conditions:
           - condition: trigger
             id: defi_reduction_time
@@ -191,16 +198,23 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: 
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
-          - action: switch.turn_off
-            target: 
-              entity_id: "{{ expand(switch_list) | map(attribute='entity_id') | list }}"
-          - action: light.turn_off
-            target: 
-              entity_id: "{{ expand(light_list) | map(attribute='entity_id') | list }}"
-          - action: fan.turn_off
-            target: 
-              entity_id: "{{ expand(fan_list) | map(attribute='entity_id') | list }}"     
+              entity_id: !input thermostats_defi
+          - choose:
+            - conditions: "{{ !input switchs_defi | count > 0 }}"
+              sequence:
+                - service: switch.turn_off
+                  target:
+                    entity_id: !input switchs_defi
+            - conditions: "{{ !input light_defi | count > 0 }}"
+              sequence:
+              - service: light.turn_off
+                target:
+                  entity_id: !input light_defi
+            - conditions: "{{ !input fan_defi | count > 0 }}"
+              sequence:
+              - service: fan.turn_off
+                target:
+                  entity_id: !input fan_defi    
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -209,34 +223,48 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: 
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
-          - action: switch.turn_on
-            target: 
-              entity_id: "{{ expand(switch_list) | map(attribute='entity_id') | list }}"
-          - action: light.turn_on
-            target: 
-              entity_id: "{{ expand(light_list) | map(attribute='entity_id') | list }}"
-          - action: fan.turn_on
-            target: 
-              entity_id: "{{ expand(fan_list) | map(attribute='entity_id') | list }}"
+              entity_id: !input thermostats_defi
+          - choose:
+            - conditions: "{{ !input switchs_defi | count > 0 }}"
+              sequence:
+                - service: switch.turn_on
+                  target:
+                    entity_id: !input switchs_defi
+            - conditions: "{{ !input light_defi | count > 0 }}"
+              sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: !input light_defi
+            - conditions: "{{ !input fan_defi | count > 0 }}"
+              sequence:
+              - service: fan.turn_on
+                target:
+                  entity_id: !input fan_defi    
       - conditions:
-          - condition: trigger
-            id: defi_recovery_time
+        - condition: trigger
+          id: defi_recovery_time
         sequence:
-          - action: climate.set_temperature
+          - service: climate.set_temperature
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: 
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
-          - action: switch.turn_on
-            target: 
-              entity_id: "{{ expand(switch_list) | map(attribute='entity_id') | list }}"
-          - action: light.turn_on
-            target: 
-              entity_id: "{{ expand(light_list) | map(attribute='entity_id') | list }}"
-          - action: fan.turn_on
-            target: 
-              entity_id: "{{ expand(fan_list) | map(attribute='entity_id') | list }}"     
+              entity_id: !input thermostats_defi
+          - choose:
+            - conditions: "{{ !input switchs_defi | count > 0 }}"
+              sequence:
+                - service: switch.turn_on
+                  target:
+                    entity_id: !input switchs_defi
+            - conditions: "{{ !input light_defi | count > 0 }}"
+              sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: !input light_defi
+            - conditions: "{{ !input fan_defi | count > 0 }}"
+              sequence:
+              - service: fan.turn_on
+                target:
+                  entity_id: !input fan_defi    
       - conditions:
           - condition: trigger
             id: defi_appreciation
@@ -245,7 +273,7 @@ actions:
             data:
               temperature: "{{ temperature_appreciation_state }}"
             target: 
-              entity_id: "{{ thermostat_list | list }}"
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_apprication_time
@@ -254,7 +282,7 @@ actions:
             data:
               temperature: "{{ temperature_appreciation_state }}"
             target: 
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_completed
@@ -263,7 +291,7 @@ actions:
             data:
               temperature: "{{ temperature_completed_state }}"
             target:   
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_completed_time
@@ -272,4 +300,4 @@ actions:
             data:
               temperature: "{{ temperature_completed_state }}"
             target: 
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
+              entity_id: !input thermostats_defi
