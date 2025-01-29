@@ -245,7 +245,7 @@ actions:
             data:
               temperature: "{{ temperature_appreciation_state }}"
             target: 
-              entity_id: "{{ expand(thermostat_list) | map(attribute='entity_id') | list }}"
+              entity_id: "{{ thermostat_list | list }}"
       - conditions:
           - condition: trigger
             id: defi_apprication_time
