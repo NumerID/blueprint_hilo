@@ -164,7 +164,7 @@ actions:
             data:
               temperature: "{{ temperature_pre_heat_state }}"
             target: 
-              entity_id: !input thermostats_defi      
+              entity_id: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_reduction
