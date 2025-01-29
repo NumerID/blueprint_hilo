@@ -114,23 +114,23 @@ triggers:
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('appreciation_time')) }}
-    id: appreciation_time_reached
+    id: defi_apprication_time
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('pre_heat_time')) }}
-    id: pre_heat_time_reached
+    id: defi_pre_heat_time
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('reduction_time')) }}
-    id: reduction_time_reached
+    id: defi_reduction_time
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('recovery_time')) }}
-    id: recovery_time_reached
+    id: defi_recovery_time
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('completed_time')) }}
-    id: completed_time_reached
+    id: defi_completed_time
 actions:
   - choose:
       - conditions:
@@ -158,18 +158,9 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_pre_heat_state].state | int}}"
+              temperature: "{{ temperature_pre_heat_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"
-      - conditions:
-          - condition: trigger
-            id: defi_pre_heat_time
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ states[temperature_pre_heat_state].state | int}}"
-            target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ input.thermostats_defi }}"      
       - conditions:
           - condition: trigger
             id: defi_reduction
@@ -194,7 +185,7 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_reduction_state].state | int}}"
+              temperature: "{{ temperature_reduction_state }}"
             target: 
               entity_id: "{{ input.thermostats_defi }}"
           - action: switch.turn_off
@@ -230,7 +221,7 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_recovery_state].state | int}}"
+              temperature: "{{ temperature_recovery_state }}"
             target: 
               entity_id: "{{ input.thermostats_defi }}"
           - action: switch.turn_on
@@ -241,34 +232,16 @@ actions:
               entity_id: "{{ input.light_defi }}"
           - action: fan.turn_on
             target: 
-              entity_id: "{{ input.fan_defi }}"
-      - conditions:
-          - condition: trigger
-            id: defi_recovery_time
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ states[temperature_recovery_state].state | int}}"
-            target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ input.fan_defi }}"      
       - conditions:
           - condition: trigger
             id: defi_appreciation
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_appreciation_state].state | int}}"
+              temperature: "{{ temperature_appreciation_state }}"
             target: 
-              entity_id: "{{ input.thermostats_defi }}"
-      - conditions:
-          - condition: trigger
-            id: defi_apprication_time
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ states[temperature_appreciation_state].state | int}}"
-            target: 
-              entity_id: "{{ input.thermostats_defi }}"
+              entity_id: "{{ input.thermostats_defi }}"      
       - conditions:
           - condition: trigger
             id: defi_apprication_time
@@ -293,6 +266,6 @@ actions:
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ states[temperature_completed_state].state | int}}"
+              temperature: "{{ temperature_completed_state }}"
             target: 
               entity_id: "{{ input.thermostats_defi }}"
