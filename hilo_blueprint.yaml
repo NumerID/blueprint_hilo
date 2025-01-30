@@ -190,21 +190,17 @@ actions:
               temperature: "{{ temperature_reduction_state }}"
             target: !input thermostats_defi
           - condition: template
-            value_template: "{{ switchs_defi | length > 0 }}"
-          - sequence:
-              - action: switch.turn_off
-                target: !input switchs_defi
-          
+            value_template: "{{ switchs_defi | length > 0 }}"          
+          - action: switch.turn_off
+            target: !input switchs_defi
           - condition: template
-            value_template: "{{ light_defi | length > 0 }}"
-          - sequence:              
-              - action: light.turn_off
-                target: !input light_defi
+            value_template: "{{ light_defi | length > 0 }}"                       
+          - action: light.turn_off
+            target: !input light_defi
           - condition: template
-            value_template: "{{ fan_defi | length > 0 }}"
-          - sequence:
-              - action: fan.turn_off
-                target: !input fan_defi
+            value_template: "{{ fan_defi | length > 0 }}"          
+          - action: fan.turn_off
+            target: !input fan_defi
       - conditions:
           - condition: trigger
             id: defi_reduction_time
@@ -215,19 +211,16 @@ actions:
             target: !input thermostats_defi
           - condition: template
             value_template: "{{ switchs_defi | length > 0 }}"
-          - sequence:
-              - action: switch.turn_off
-                target: !input switchs_defi
+          - action: switch.turn_off
+            target: !input switchs_defi
           - condition: template
             value_template: "{{ light_defi | length > 0 }}"
-          - sequence:              
-              - action: light.turn_off
-                target: !input light_defi
+          - action: light.turn_off
+            target: !input light_defi
           - condition: template
             value_template: "{{ fan_defi | length > 0 }}"
-          - sequence:           
-              - action: fan.turn_off
-                target: !input fan_defi
+          - action: fan.turn_off
+            target: !input fan_defi
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -238,19 +231,16 @@ actions:
             target: !input thermostats_defi
           - condition: template
             value_template: "{{ switchs_defi | length > 0 and restart_switch }}"
-          - sequence:
-              - action: switch.turn_on
-                target: !input switchs_defi
+          - action: switch.turn_on
+            target: !input switchs_defi
           - condition: template
             value_template: "{{ light_defi | length > 0 and restart_light }}"
-          - sequence:              
-              - action: light.turn_on
-                target: !input light_defi
+          - action: light.turn_on
+            target: !input light_defi
           - condition: template
             value_template: "{{ fan_defi | length > 0 and restart_fan }}"
-          - sequence:
-              - action: fan.turn_on
-                target: !input fan_defi
+          - action: fan.turn_on
+            target: !input fan_defi
       - conditions:
         - condition: trigger
           id: defi_recovery_time
@@ -261,19 +251,16 @@ actions:
             target: !input thermostats_defi
           - condition: template
             value_template: "{{ switchs_defi | length > 0 and restart_switch }}"
-          - sequence:
-              - action: switch.turn_on
-                target: !input switchs_defi
+          - action: switch.turn_on
+            target: !input switchs_defi
           - condition: template
             value_template: "{{ light_defi | length > 0 and restart_light }}"
-          - sequence:              
-              - action: light.turn_on
-                target: !input light_defi
+          - action: light.turn_on
+            target: !input light_defi
           - condition: template
             value_template: "{{ fan_defi | length > 0 and restart_fan }}"
-          - sequence:
-              - action: fan.turn_on
-                target: !input fan_defi
+          - action: fan.turn_on
+            target: !input fan_defi
       - conditions:
           - condition: trigger
             id: defi_appreciation
