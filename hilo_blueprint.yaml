@@ -5,11 +5,53 @@ blueprint:
   input:
     thermostats_defi:
       name: Thermostats Défi
-      description: Les thermostats à configurer lors des différents statuts du sensor.defi_hilo.
+      description: Les thermostats à configurer lors des différents statuts du sensor.defi_hilo. 
       selector:
         target:
           entity:
-            domain: climate    
+            domain: climate
+    switchs_defi:
+      name: Switchs Défi
+      description: Les switchs à configurer lors des différents statuts du sensor.defi_hilo. Elles vont être éteintes lors du début du défi et allumées lors de la phase de reprise.
+      selector:
+        target:
+          entity:
+            domain: switch
+      default: {}
+    light_defi:
+      name: Lumières Défi
+      description: Les lumières à configurer lors des différents statuts du sensor.defi_hilo. Elles vont être éteintes lors du début du défi et allumées lors de la phase de reprise.
+      selector:
+        target:
+          entity:
+            domain: light
+      default: {}
+    fan_defi:
+      name: Ventilateurs Défi
+      description: Les ventilateurs à configurer lors des différents statuts du sensor.defi_hilo. Ils vont être éteints lors du début du défi et allumés lors de la phase de reprise.
+      selector:
+        target:
+          entity:
+            domain: fan
+      default: {}
+    restart_switch:
+      name: Redémarrer les switchs
+      description: Redémarrer les switchs lors de la phase de reprise? Cela permet de s'assurer que les switchs sont bien éteints ou allumés. Cette option existe parce que si des switchs n'ont pas à être allumés après le défi, il est possible de les laisser éteints.
+      default: true
+      selector:
+        boolean: {}
+    restart_light:
+      name: Redémarrer les lumières
+      description: Redémarrer les lumières lors de la phase de reprise? Cela permet de s'assurer que les lumières sont bien éteintes ou allumées. Cette option existe parce que si des lumières n'ont pas à être allumées après le défi, il est possible de les laisser éteintes.
+      default: true
+      selector:
+        boolean: {}
+    restart_fan:
+      name: Redémarrer les ventilateurs
+      description: Redémarrer les ventilateurs lors de la phase de reprise? Cela permet de s'assurer que les ventilateurs sont bien éteints ou allumés. Cette option existe parce que si des ventilateurs n'ont pas à être allumés après le défi, il est possible de les laisser éteints.
+      default: true
+      selector:
+        boolean: {}
     temperature_appreciation:
       name: Température lors des périodes d'ancrage
       description: Température à configurer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
@@ -56,6 +98,10 @@ variables:
   temperature_reduction_state: !input temperature_reduction
   temperature_recovery_state: !input temperature_recovery
   temperature_completed_state: !input temperature_completed
+  thermostat_list: !input thermostats_defi
+  switch_list: !input switchs_defi
+  light_list: !input light_defi
+  fan_list: !input fan_defi
   appreciation_time: null
   pre_heat_time: null
   reduction_time: null
@@ -90,23 +136,23 @@ triggers:
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('appreciation_time')) }}
-    id: appreciation_time_reached
+    id: defi_apprication_time
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('pre_heat_time')) }}
-    id: pre_heat_time_reached
+    id: defi_pre_heat_time
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('reduction_time')) }}
-    id: reduction_time_reached
+    id: defi_reduction_time
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('recovery_time')) }}
-    id: recovery_time_reached
+    id: defi_recovery_time
   - trigger: template
     value_template: >
       {{ now() >= as_datetime(states('completed_time')) }}
-    id: completed_time_reached
+    id: defi_completed_time
 actions:
   - choose:
       - conditions:
@@ -134,7 +180,7 @@ actions:
           - action: climate.set_temperature
             data:
               temperature: "{{ temperature_pre_heat_state }}"
-            target: !input thermostats_defi      
+            target: !input thermostats_defi
       - conditions:
           - condition: trigger
             id: defi_reduction
@@ -143,6 +189,18 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: !input thermostats_defi
+          - condition: template
+            value_template: "{{ switchs_defi | length > 0 }}"          
+          - action: switch.turn_off
+            target: !input switchs_defi
+          - condition: template
+            value_template: "{{ light_defi | length > 0 }}"                       
+          - action: light.turn_off
+            target: !input light_defi
+          - condition: template
+            value_template: "{{ fan_defi | length > 0 }}"          
+          - action: fan.turn_off
+            target: !input fan_defi
       - conditions:
           - condition: trigger
             id: defi_reduction_time
@@ -150,7 +208,19 @@ actions:
           - action: climate.set_temperature
             data:
               temperature: "{{ temperature_reduction_state }}"
-            target: !input thermostats_defi      
+            target: !input thermostats_defi
+          - condition: template
+            value_template: "{{ switchs_defi | length > 0 }}"
+          - action: switch.turn_off
+            target: !input switchs_defi
+          - condition: template
+            value_template: "{{ light_defi | length > 0 }}"
+          - action: light.turn_off
+            target: !input light_defi
+          - condition: template
+            value_template: "{{ fan_defi | length > 0 }}"
+          - action: fan.turn_off
+            target: !input fan_defi
       - conditions:
           - condition: trigger
             id: defi_recovery
@@ -159,25 +229,49 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
+          - condition: template
+            value_template: "{{ switchs_defi | length > 0 and restart_switch }}"
+          - action: switch.turn_on
+            target: !input switchs_defi
+          - condition: template
+            value_template: "{{ light_defi | length > 0 and restart_light }}"
+          - action: light.turn_on
+            target: !input light_defi
+          - condition: template
+            value_template: "{{ fan_defi | length > 0 and restart_fan }}"
+          - action: fan.turn_on
+            target: !input fan_defi
       - conditions:
-          - condition: trigger
-            id: defi_recovery_time
+        - condition: trigger
+          id: defi_recovery_time
         sequence:
           - action: climate.set_temperature
             data:
               temperature: "{{ temperature_recovery_state }}"
-            target: !input thermostats_defi      
+            target: !input thermostats_defi
+          - condition: template
+            value_template: "{{ switchs_defi | length > 0 and restart_switch }}"
+          - action: switch.turn_on
+            target: !input switchs_defi
+          - condition: template
+            value_template: "{{ light_defi | length > 0 and restart_light }}"
+          - action: light.turn_on
+            target: !input light_defi
+          - condition: template
+            value_template: "{{ fan_defi | length > 0 and restart_fan }}"
+          - action: fan.turn_on
+            target: !input fan_defi
       - conditions:
           - condition: trigger
             id: defi_appreciation
         sequence:
           - action: climate.set_temperature
             data:
-              temperature: "{{ temperature_appreciation_state}}"
-            target: !input thermostats_defi     
+              temperature: "{{ temperature_appreciation_state }}"
+            target: !input thermostats_defi
       - conditions:
           - condition: trigger
-            id: defi_apprication_time
+            id: defi_appreciation_time
         sequence:
           - action: climate.set_temperature
             data:
