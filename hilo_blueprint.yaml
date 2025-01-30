@@ -191,18 +191,18 @@ actions:
             target: !input thermostats_defi
           - condition: template
             value_template: "{{ switchs_defi | length > 0 }}"
-            sequence:
+          - sequence:
               - action: switch.turn_off
                 target: !input switchs_defi
           
           - condition: template
             value_template: "{{ light_defi | length > 0 }}"
-            sequence:              
+          - sequence:              
               - action: light.turn_off
                 target: !input light_defi
           - condition: template
             value_template: "{{ fan_defi | length > 0 }}"
-            sequence:
+          - sequence:
               - action: fan.turn_off
                 target: !input fan_defi
       - conditions:
@@ -215,17 +215,17 @@ actions:
             target: !input thermostats_defi
           - condition: template
             value_template: "{{ switchs_defi | length > 0 }}"
-            sequence:
+          - sequence:
               - action: switch.turn_off
                 target: !input switchs_defi
           - condition: template
             value_template: "{{ light_defi | length > 0 }}"
-            sequence:              
+          - sequence:              
               - action: light.turn_off
                 target: !input light_defi
           - condition: template
             value_template: "{{ fan_defi | length > 0 }}"
-            sequence:           
+          - sequence:           
               - action: fan.turn_off
                 target: !input fan_defi
       - conditions:
@@ -238,17 +238,17 @@ actions:
             target: !input thermostats_defi
           - condition: template
             value_template: "{{ switchs_defi | length > 0 and restart_switch }}"
-            sequence:
+          - sequence:
               - action: switch.turn_on
                 target: !input switchs_defi
           - condition: template
             value_template: "{{ light_defi | length > 0 and restart_light }}"
-            sequence:              
+          - sequence:              
               - action: light.turn_on
                 target: !input light_defi
           - condition: template
             value_template: "{{ fan_defi | length > 0 and restart_fan }}"
-            sequence:
+          - sequence:
               - action: fan.turn_on
                 target: !input fan_defi
       - conditions:
@@ -261,17 +261,17 @@ actions:
             target: !input thermostats_defi
           - condition: template
             value_template: "{{ switchs_defi | length > 0 and restart_switch }}"
-            sequence:
+          - sequence:
               - action: switch.turn_on
                 target: !input switchs_defi
           - condition: template
             value_template: "{{ light_defi | length > 0 and restart_light }}"
-            sequence:              
+          - sequence:              
               - action: light.turn_on
                 target: !input light_defi
           - condition: template
             value_template: "{{ fan_defi | length > 0 and restart_fan }}"
-            sequence:
+          - sequence:
               - action: fan.turn_on
                 target: !input fan_defi
       - conditions:
