@@ -34,6 +34,24 @@ blueprint:
           entity:
             domain: fan
       default: {}
+    restart_switch:
+      name: Redémarrer les switchs
+      description: Redémarrer les switchs lors de la phase de reprise? Cela permet de s'assurer que les switchs sont bien éteints ou allumés. Cette option existe parce que si des switchs n'ont pas à être allumés après le défi, il est possible de les laisser éteints.
+      default: true
+      selector:
+        boolean: {}
+    restart_light:
+      name: Redémarrer les lumières
+      description: Redémarrer les lumières lors de la phase de reprise? Cela permet de s'assurer que les lumières sont bien éteintes ou allumées. Cette option existe parce que si des lumières n'ont pas à être allumées après le défi, il est possible de les laisser éteintes.
+      default: true
+      selector:
+        boolean: {}
+    restart_fan:
+      name: Redémarrer les ventilateurs
+      description: Redémarrer les ventilateurs lors de la phase de reprise? Cela permet de s'assurer que les ventilateurs sont bien éteints ou allumés. Cette option existe parce que si des ventilateurs n'ont pas à être allumés après le défi, il est possible de les laisser éteints.
+      default: true
+      selector:
+        boolean: {}
     temperature_appreciation:
       name: Température lors des périodes d'ancrage
       description: Température à configurer lorsque le sensor.defi_hilo est dans le statut appreciation. C'est la température à à configurer lorsque le système est dans sa période d'ancrage.
@@ -211,15 +229,15 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
-          - conditions: "{{ switchs_defi | length > 0 }}"
+          - conditions: "{{ switchs_defi | length > 0 and restart_switch }}"
             sequence:
               - action: switch.turn_on
                 target: !input switchs_defi
-          - conditions: "{{ light_defi | length > 0 }}"
+          - conditions: "{{ light_defi | length > 0 and restart_light }}"
             sequence:              
               - action: light.turn_on
                 target: !input light_defi
-          - conditions: "{{ fan_defi | length > 0 }}"
+          - conditions: "{{ fan_defi | length > 0 and restart_fan }}"
             sequence:
               - action: fan.turn_on
                 target: !input fan_defi
@@ -231,15 +249,15 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
-          - conditions: "{{ switchs_defi | length > 0 }}"
+          - conditions: "{{ switchs_defi | length > 0 and restart_switch }}"
             sequence:
               - action: switch.turn_on
                 target: !input switchs_defi
-          - conditions: "{{ light_defi | length > 0 }}"
+          - conditions: "{{ light_defi | length > 0 and restart_light }}"
             sequence:              
               - action: light.turn_on
                 target: !input light_defi
-          - conditions: "{{ fan_defi | length > 0 }}"
+          - conditions: "{{ fan_defi | length > 0 and restart_fan }}"
             sequence:
               - action: fan.turn_on
                 target: !input fan_defi
