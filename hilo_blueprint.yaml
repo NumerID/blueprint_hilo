@@ -170,20 +170,13 @@ actions:
           - action: climate.set_temperature
             data:
               temperature: "{{ temperature_reduction_state }}"
-            target: !input thermostats_defi
-          - choose:
-            - conditions: "{{ switch_list | count > 0 }}"
-              sequence:
-                - action: switch.turn_off
-                  target: !input switchs_defi
-            - conditions: "{{ light_list | count > 0 }}"
-              sequence:
-              - action: light.turn_off
-                target: !input light_defi
-            - conditions: "{{ fan_list | count > 0 }}"
-              sequence:
-              - service: fan.turn_off
-                target: !input fan_defi   
+            target: !input thermostats_defi  
+          - action: switch.turn_off
+            target: !input switchs_defi            
+          - action: light.turn_off
+            target: !input light_defi            
+          - action: fan.turn_off
+            target: !input fan_defi   
       - conditions:
           - condition: trigger
             id: defi_reduction_time
