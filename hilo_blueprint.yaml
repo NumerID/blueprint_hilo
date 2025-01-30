@@ -189,15 +189,19 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: !input thermostats_defi
-          - condition: "{{ switchs_defi | length > 0 }}"
+          - condition: template
+            value_template: "{{ switchs_defi | length > 0 }}"
             sequence:
               - action: switch.turn_off
                 target: !input switchs_defi
-          - condition: "{{ light_defi | length > 0 }}"
+          
+          - condition: template
+            value_template: "{{ light_defi | length > 0 }}"
             sequence:              
               - action: light.turn_off
                 target: !input light_defi
-          - condition: "{{ fan_defi | length > 0 }}"
+          - condition: template
+            value_template: "{{ fan_defi | length > 0 }}"
             sequence:
               - action: fan.turn_off
                 target: !input fan_defi
@@ -209,15 +213,18 @@ actions:
             data:
               temperature: "{{ temperature_reduction_state }}"
             target: !input thermostats_defi
-          - condition: "{{ switchs_defi | length > 0 }}"
+          - condition: template
+            value_template: "{{ switchs_defi | length > 0 }}"
             sequence:
               - action: switch.turn_off
                 target: !input switchs_defi
-          - condition: "{{ light_defi | length > 0 }}"
+          - condition: template
+            value_template: "{{ light_defi | length > 0 }}"
             sequence:              
               - action: light.turn_off
                 target: !input light_defi
-          - condition: "{{ fan_defi | length > 0 }}"
+          - condition: template
+            value_template: "{{ fan_defi | length > 0 }}"
             sequence:           
               - action: fan.turn_off
                 target: !input fan_defi
@@ -229,15 +236,18 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
-          - condition: "{{ switchs_defi | length > 0 and restart_switch }}"
+          - condition: template
+            value_template: "{{ switchs_defi | length > 0 and restart_switch }}"
             sequence:
               - action: switch.turn_on
                 target: !input switchs_defi
-          - condition: "{{ light_defi | length > 0 and restart_light }}"
+          - condition: template
+            value_template: "{{ light_defi | length > 0 and restart_light }}"
             sequence:              
               - action: light.turn_on
                 target: !input light_defi
-          - condition: "{{ fan_defi | length > 0 and restart_fan }}"
+          - condition: template
+            value_template: "{{ fan_defi | length > 0 and restart_fan }}"
             sequence:
               - action: fan.turn_on
                 target: !input fan_defi
@@ -249,15 +259,18 @@ actions:
             data:
               temperature: "{{ temperature_recovery_state }}"
             target: !input thermostats_defi
-          - condition: "{{ switchs_defi | length > 0 and restart_switch }}"
+          - condition: template
+            value_template: "{{ switchs_defi | length > 0 and restart_switch }}"
             sequence:
               - action: switch.turn_on
                 target: !input switchs_defi
-          - condition: "{{ light_defi | length > 0 and restart_light }}"
+          - condition: template
+            value_template: "{{ light_defi | length > 0 and restart_light }}"
             sequence:              
               - action: light.turn_on
                 target: !input light_defi
-          - condition: "{{ fan_defi | length > 0 and restart_fan }}"
+          - condition: template
+            value_template: "{{ fan_defi | length > 0 and restart_fan }}"
             sequence:
               - action: fan.turn_on
                 target: !input fan_defi
