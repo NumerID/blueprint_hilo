@@ -289,6 +289,11 @@ actions:
           - condition: trigger
             id: defi_appreciation
         sequence:
+          - if:
+              - condition: template
+                value_template: "{{ state_attr('sensor.defi_hilo', 'period') == 'pm' }}"
+            then:
+              - delay: "01:00:00"
           - action: climate.set_temperature
             data:
               temperature: "{{ temperature_appreciation_state }}"
@@ -297,6 +302,11 @@ actions:
           - condition: trigger
             id: defi_appreciation_time
         sequence:
+          - if:
+              - condition: template
+                value_template: "{{ state_attr('sensor.defi_hilo', 'period') == 'pm' }}"
+            then:
+              - delay: "01:00:00"
           - action: climate.set_temperature
             data:
               temperature: "{{ temperature_appreciation_state }}"
