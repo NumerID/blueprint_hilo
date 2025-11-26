@@ -35,3 +35,7 @@ Automatisme de secours:
 Comme le sensor defi_hilo est dépendant de la connexion Internet avec l'interface Hilo, si un problème survenait à votre connexion durant le processus du défi, il est possible que vous ne soyez pas en mesure de faire fonctionner les automatismes basés sur le statut de ce sensor. Ce Blueprint permet dans ce cas, d'utiliser les attributs du sensor afin de démarrer les différentes phases comme soupape de secours. 
 
 En effet, lorsqu'un défi se prépare bientôt, le sensor se met en mode "scheduled". Durant cette période, le sensor est mis à jour avec des attributs de date/heure des différentes phase du défi à venir. Lorsqu'il est en mode scheduled, un automatisme va prendre ces attributs et les assigner à des triggers de secours. Ainsi, si le sensor n'est pas en mesure, par exemple, de se modifier au mode de pré-chauffage, le trigger de secours qui contient la date/heure du début de la période de pré-chauffage se déclenchera et prendra les températures configurées durant la période de pré-chauffage.
+
+Nouveau pour l'hiver 2025-2026
+
+Comme la période d'ancrage a été modifiée et est différente selon si c'est un défi du matin ou de l'après-midi, le blueprint a été modifé pour prendre en compte cette réalité. Si vous avez un défi durant l'après-midi, le sensor defi_hilo va quand même changer pour le statut appreciation mais l'automatisme associé au changement sera retardé pendant 1 heure. Vous n'avez aucune autre configuration à changer. 
