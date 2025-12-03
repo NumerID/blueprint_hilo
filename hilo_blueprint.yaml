@@ -107,6 +107,10 @@ variables:
   reduction_time: null
   recovery_time: null
   completed_time: null
+  restart_switch: !input restart_switch
+  restart_light: !input restart_light
+  restart_fan: !input restart_fan
+
 
 triggers:
   - trigger: state
