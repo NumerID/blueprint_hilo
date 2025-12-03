@@ -243,19 +243,19 @@ actions:
             target: !input thermostats_defi
           - if:
               - condition: template
-                value_template: "{{ switch_list | length > 0 and restart_switch == true }}"
+                value_template: "{{ switch_list | length > 0 and restart_switch | bool }}"
             then:
               - action: switch.turn_on
                 target: !input switchs_defi
           - if:
               - condition: template
-                value_template: "{{ light_list | length > 0 and restart_light == true }}"
+                value_template: "{{ light_list | length > 0 and restart_light | bool }}"
             then:
               - action: light.turn_on
                 target: !input light_defi
           - if:
               - condition: template
-                value_template: "{{ fan_list | length > 0 and restart_fan == true }}"
+                value_template: "{{ fan_list | length > 0 and restart_fan | bool }}"
             then:
               - action: fan.turn_on
                 target: !input fan_defi
@@ -269,19 +269,19 @@ actions:
             target: !input thermostats_defi
           - if:
               - condition: template
-                value_template: "{{ switch_list | length > 0 and restart_switch == true }}"
+                value_template: "{{ switch_list | length > 0 and restart_switch | bool }}"
             then:
               - action: switch.turn_on
                 target: !input switchs_defi
           - if:
               - condition: template
-                value_template: "{{ light_list | length > 0 and restart_light == true }}"
+                value_template: "{{ light_list | length > 0 and restart_light | bool }}"
             then:
               - action: light.turn_on
                 target: !input light_defi
           - if:
               - condition: template
-                value_template: "{{ fan_list | length > 0 and restart_fan == true }}"
+                value_template: "{{ fan_list | length > 0 and restart_fan | bool }}"
             then:
               - action: fan.turn_on
                 target: !input fan_defi
