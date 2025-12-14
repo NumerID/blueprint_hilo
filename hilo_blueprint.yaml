@@ -59,6 +59,7 @@ blueprint:
         number:
           min: 15
           max: 25
+          step: 0.5
           unit_of_measurement: celcius      
     temperature_pre_heat:
       name: Température de Pré Chauffage
@@ -67,6 +68,7 @@ blueprint:
         number:
           min: 15
           max: 25
+          step: 0.5
           unit_of_measurement: celcius
     temperature_reduction:
       name: Température lors du défi
@@ -75,6 +77,7 @@ blueprint:
         number:
           min: 15
           max: 25
+          step: 0.5
           unit_of_measurement: celcius
     temperature_recovery:
       name: Température de la phase de reprise
@@ -83,6 +86,7 @@ blueprint:
         number:
           min: 15
           max: 25
+          step: 0.5
           unit_of_measurement: celcius
     temperature_completed:
       name: Température de retour à la normale
@@ -91,6 +95,7 @@ blueprint:
         number:
           min: 15
           max: 25
+          step: 0.5
           unit_of_measurement: celcius       
 variables:  
   temperature_appreciation_state: !input temperature_appreciation
