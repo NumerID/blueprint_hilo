@@ -70,6 +70,16 @@ blueprint:
           max: 25
           step: 0.5
           unit_of_measurement: celcius
+    pre_heat_minutes:
+      name: Minutes de Pré Chauffage
+      description: Nombre de minutes avant le début du défi pour commencer le pré-chauffage.
+      default: 120
+      selector:
+        number:
+          min: 0
+          max: 180
+          step: 5
+          unit_of_measurement: minutes
     temperature_reduction:
       name: Température lors du défi
       description: Température à configurer lorsque le sensor.defi_hilo est dans le statut reduction. C'est la température à descendre la maison lors du début du défi.
@@ -100,6 +110,7 @@ blueprint:
 variables:  
   temperature_appreciation_state: !input temperature_appreciation
   temperature_pre_heat_state: !input temperature_pre_heat
+  pre_heat_minutes_state: !input pre_heat_minutes
   temperature_reduction_state: !input temperature_reduction
   temperature_recovery_state: !input temperature_recovery
   temperature_completed_state: !input temperature_completed
@@ -170,7 +181,7 @@ actions:
         sequence:
           - variables:
               appreciation_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.appreciation_start | as_datetime }}"
-              pre_heat_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.preheat_start | as_datetime }}"
+              pre_heat_time: "{{ (state_attr('sensor.defi_hilo', 'next_events')[0].phases.reduction_start | as_datetime) - timedelta(minutes=pre_heat_minutes_state) }}"
               reduction_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.reduction_start | as_datetime }}"
               recovery_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_start | as_datetime }}" 
               completed_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_end | as_datetime }}"         
