@@ -126,10 +126,6 @@ variables:
   switch_list: !input switchs_defi
   light_list: !input light_defi
   fan_list: !input fan_defi
-  pre_heat_time: null
-  reduction_time: null
-  recovery_time: null
-  completed_time: null
   restart_switch: !input restart_switch
   restart_light: !input restart_light
   restart_fan: !input restart_fan
@@ -153,8 +149,8 @@ triggers:
     id: defi_completed
   - trigger: template
     value_template: >
-      {{ now() >= as_datetime(states('pre_heat_time')) }}
-    id: defi_pre_heat_time
+      {{ states('sensor.defi_hilo') == 'pre_heat' and now() >= (state_attr('sensor.defi_hilo', 'next_events')[0].phases.preheat_end | as_datetime) - timedelta(minutes=pre_heat_minutes_state)  }}
+    id: defi_pre_heat
 
 actions:
   - choose:
@@ -163,13 +159,13 @@ actions:
             id: defi_scheduled
         sequence:
           - variables:
-              pre_heat_time: "{{ (state_attr('sensor.defi_hilo', 'next_events')[0].phases.reduction_start | as_datetime) - timedelta(minutes=pre_heat_minutes_state) }}"
+              pre_heat_time: "{{ (state_attr('sensor.defi_hilo', 'next_events')[0].phases.preheat_end | as_datetime) - timedelta(minutes=pre_heat_minutes_state) }}"
               reduction_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.reduction_start | as_datetime }}"
               recovery_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_start | as_datetime }}"
               completed_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_end | as_datetime }}"
       - conditions:
           - condition: trigger
-            id: defi_pre_heat_time
+            id: defi_pre_heat
         sequence:
           - action: climate.set_temperature
             data:
