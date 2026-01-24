@@ -155,18 +155,7 @@ triggers:
     value_template: >
       {{ now() >= as_datetime(states('pre_heat_time')) }}
     id: defi_pre_heat_time
-  - trigger: template
-    value_template: >
-      {{ now() >= as_datetime(states('reduction_time')) }}
-    id: defi_reduction_time
-  - trigger: template
-    value_template: >
-      {{ now() >= as_datetime(states('recovery_time')) }}
-    id: defi_recovery_time
-  - trigger: template
-    value_template: >
-      {{ now() >= as_datetime(states('completed_time')) }}
-    id: defi_completed_time
+
 actions:
   - choose:
       - conditions:
@@ -191,34 +180,6 @@ actions:
       - conditions:
           - condition: trigger
             id: defi_reduction
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ temperature_reduction_state }}"
-            target: !input thermostats_defi
-          - choose: []
-            default: !input custom_actions_reduction
-          - if:
-              - condition: template
-                value_template: "{{ switch_list | length > 0 }}"
-            then:
-              - action: switch.turn_off
-                target: !input switchs_defi
-          - if:
-              - condition: template
-                value_template: "{{ light_list | length > 0 }}"
-            then:
-              - action: light.turn_off
-                target: !input light_defi
-          - if:
-              - condition: template
-                value_template: "{{ fan_list | length > 0 }}"
-            then:
-              - action: fan.turn_off
-                target: !input fan_defi
-      - conditions:
-          - condition: trigger
-            id: defi_reduction_time
         sequence:
           - action: climate.set_temperature
             data:
@@ -274,43 +235,7 @@ actions:
                 target: !input fan_defi
       - conditions:
           - condition: trigger
-            id: defi_recovery_time
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ temperature_recovery_state }}"
-            target: !input thermostats_defi
-          - choose: []
-            default: !input custom_actions_recovery
-          - if:
-              - condition: template
-                value_template: "{{ switch_list | length > 0 and restart_switch | bool }}"
-            then:
-              - action: switch.turn_on
-                target: !input switchs_defi
-          - if:
-              - condition: template
-                value_template: "{{ light_list | length > 0 and restart_light | bool }}"
-            then:
-              - action: light.turn_on
-                target: !input light_defi
-          - if:
-              - condition: template
-                value_template: "{{ fan_list | length > 0 and restart_fan | bool }}"
-            then:
-              - action: fan.turn_on
-                target: !input fan_defi
-      - conditions:
-          - condition: trigger
             id: defi_completed
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ temperature_completed_state }}"
-            target: !input thermostats_defi
-      - conditions:
-          - condition: trigger
-            id: defi_completed_time
         sequence:
           - action: climate.set_temperature
             data:
