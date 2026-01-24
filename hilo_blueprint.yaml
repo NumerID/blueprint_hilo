@@ -5,7 +5,7 @@ blueprint:
   input:
     thermostats_defi:
       name: Thermostats Défi
-      description: Les thermostats à configurer lors des différents statuts du sensor.defi_hilo. 
+      description: Les thermostats à configurer lors des différents statuts du sensor.defi_hilo.
       selector:
         target:
           entity:
@@ -60,7 +60,7 @@ blueprint:
           min: 15
           max: 25
           step: 0.5
-          unit_of_measurement: celcius      
+          unit_of_measurement: celcius
     temperature_pre_heat:
       name: Température de Pré Chauffage
       description: Température à configurer lorsque le sensor.defi_hilo est dans le statut pre_heat. C'est la température à monter la maison avant le début du défi.
@@ -124,8 +124,8 @@ blueprint:
           min: 15
           max: 25
           step: 0.5
-          unit_of_measurement: celcius       
-variables:  
+          unit_of_measurement: celcius
+variables:
   temperature_appreciation_state: !input temperature_appreciation
   temperature_pre_heat_state: !input temperature_pre_heat
   pre_heat_minutes_state: !input pre_heat_minutes
@@ -145,16 +145,11 @@ variables:
   restart_light: !input restart_light
   restart_fan: !input restart_fan
 
-
 triggers:
   - trigger: state
     entity_id: sensor.defi_hilo
     to: scheduled
     id: defi_scheduled
-  - trigger: state
-    entity_id: sensor.defi_hilo
-    to: pre_heat
-    id: defi_pre_heat
   - trigger: state
     entity_id: sensor.defi_hilo
     to: reduction
@@ -201,18 +196,8 @@ actions:
               appreciation_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.appreciation_start | as_datetime }}"
               pre_heat_time: "{{ (state_attr('sensor.defi_hilo', 'next_events')[0].phases.reduction_start | as_datetime) - timedelta(minutes=pre_heat_minutes_state) }}"
               reduction_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.reduction_start | as_datetime }}"
-              recovery_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_start | as_datetime }}" 
-              completed_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_end | as_datetime }}"         
-      - conditions:
-          - condition: trigger
-            id: defi_pre_heat
-        sequence:
-          - action: climate.set_temperature
-            data:
-              temperature: "{{ temperature_pre_heat_state }}"
-            target: !input thermostats_defi
-          - choose: []
-            default: !input custom_actions_pre_heat
+              recovery_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_start | as_datetime }}"
+              completed_time: "{{ state_attr('sensor.defi_hilo', 'next_events')[0].phases.recovery_end | as_datetime }}"
       - conditions:
           - condition: trigger
             id: defi_pre_heat_time
@@ -308,8 +293,8 @@ actions:
               - action: fan.turn_on
                 target: !input fan_defi
       - conditions:
-        - condition: trigger
-          id: defi_recovery_time
+          - condition: trigger
+            id: defi_recovery_time
         sequence:
           - action: climate.set_temperature
             data:
