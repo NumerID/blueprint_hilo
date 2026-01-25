@@ -1,6 +1,7 @@
-alias: Défi Hilo Préchauffe AM
-description: "Gère la préchauffe Hilo du matin/Manages the AM pre-heat phase of a Hilo Challenge"
-mode: single
+alias: Défi Hilo Préchauffe AM test
+description: >-
+  Gère la préchauffe Hilo du matin/Manages the AM pre-heat phase of a Hilo
+  Challenge
 triggers:
   - entity_id:
       - sensor.defi_hilo
@@ -8,18 +9,6 @@ triggers:
     trigger: state
   - at: "04:00:00"
     trigger: time
-conditions:
-  - condition: time
-    before: "04:05:00"
-    after: "03:55:00"
-  - condition: or
-    conditions:
-      - condition: state
-        entity_id: sensor.defi_hilo
-        state: pre_heat
-      - condition: state
-        entity_id: sensor.defi_hilo
-        state: reduction
 actions:
   - data:
       temperature: 15
@@ -31,3 +20,4 @@ actions:
     target:
       entity_id: switch.prise_echangeur_d_air
     action: switch.turn_off
+mode: single
