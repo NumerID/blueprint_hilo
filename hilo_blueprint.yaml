@@ -124,7 +124,7 @@ triggers:
     at: "04:00:00"
     id: defi_pre_heat_time
   - trigger: time
-    at: "14:00:00"
+    at: "14:01:00"
     id: defi_pre_heat_time
   - trigger: state
     entity_id: sensor.defi_hilo
