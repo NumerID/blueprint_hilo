@@ -1,0 +1,29 @@
+alias: Winter (sleep) temp
+description: ""
+triggers:
+  - at: "22:00:00"
+    trigger: time
+conditions: []
+actions:
+  - metadata: {}
+    data:
+      temperature: 17.5
+    target:
+      device_id: 0f809ca7974f410156587f3d6fcbe59c
+    action: climate.set_temperature
+  - action: climate.set_temperature
+    metadata: {}
+    data:
+      temperature: 17.5
+    target:
+      area_id:
+        - bathroom
+        - basement_desk
+        - playroom
+  - action: climate.set_temperature
+    metadata: {}
+    data:
+      temperature: 12
+    target:
+      area_id: garage
+mode: single

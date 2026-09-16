@@ -1,0 +1,25 @@
+next_events: 
+- event_id: 361
+  participating: false
+  configurable: false
+  period: am
+  total_devices: 0
+  opt_out_devices: 0
+  pre_heat_devices: 0
+  mode: Unknown
+  allowed_kWh: 0
+  used_kWh: 9.04
+  used_percentage: 0
+  last_update: '2026-01-24T09:14:22.739728-05:00'
+  phases:
+    settingsDeadlineUTC: '2026-01-24T00:00:00-05:00'
+    preheat_start: '2026-01-24T01:00:00-05:00'
+    preheat_end: '2026-01-24T06:00:00-05:00'
+    reduction_start: '2026-01-24T06:00:00-05:00'
+    reduction_end: '2026-01-24T10:00:00-05:00'
+    recovery_start: '2026-01-24T10:00:00-05:00'
+    recovery_end: '2026-01-24T11:00:00-05:00'
+  state: reduction
+
+icon: mdi:power-plug-off
+friendly_name: Defi Hilo

@@ -1,0 +1,201 @@
+alias: Hilo Automation
+description: ""
+triggers:
+  - trigger: state
+    entity_id: sensor.defi_hilo
+    to: scheduled
+    id: defi_scheduled
+  - trigger: state
+    entity_id: sensor.defi_hilo
+    to: reduction
+    id: defi_reduction
+  - trigger: state
+    entity_id: sensor.defi_hilo
+    to: recovery
+    id: defi_recovery
+  - trigger: state
+    entity_id: sensor.defi_hilo
+    to: completed
+    id: defi_completed
+  - trigger: template
+    value_template: >
+      {{ states('sensor.defi_hilo') == 'pre_heat'
+         and now() >= (states('input_datetime.defi_hilo_last_preheat') | as_datetime) + timedelta(minutes=pre_heat_minutes_state)
+         and now() >= (state_attr('sensor.defi_hilo', 'next_events')[0].phases.preheat_end | as_datetime) - timedelta(minutes=pre_heat_minutes_state)  
+      }}
+    id: defi_pre_heat
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: defi_scheduled
+        sequence:
+          - variables:
+              pre_heat_time: >-
+                {{ (state_attr('sensor.defi_hilo',
+                'next_events')[0].phases.preheat_end | as_datetime) -
+                timedelta(minutes=pre_heat_minutes_state) }}
+              reduction_time: >-
+                {{ state_attr('sensor.defi_hilo',
+                'next_events')[0].phases.reduction_start | as_datetime }}
+              recovery_time: >-
+                {{ state_attr('sensor.defi_hilo',
+                'next_events')[0].phases.recovery_start | as_datetime }}
+              completed_time: >-
+                {{ state_attr('sensor.defi_hilo',
+                'next_events')[0].phases.recovery_end | as_datetime }}
+      - conditions:
+          - condition: trigger
+            id: defi_pre_heat
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ temperature_pre_heat_state }}"
+            target:
+              entity_id:
+                - climate.tstat_c5009a_lyric_t6_pro_thermostat
+                - climate.th1123wf_bd6688
+                - climate.basement_living
+                - climate.th1123wf_239960
+          - action: input_datetime.set_datetime
+            data:
+              entity_id: input_datetime.defi_hilo_last_preheat
+              datetime: "{{ now() }}"
+          - choose: []
+            default:
+              - action: notify.all_devices
+                metadata: {}
+                data:
+                  message: Hilo Challenge - Pre-heating started.
+      - conditions:
+          - condition: trigger
+            id: defi_reduction
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ temperature_reduction_state }}"
+            target:
+              entity_id:
+                - climate.tstat_c5009a_lyric_t6_pro_thermostat
+                - climate.th1123wf_bd6688
+                - climate.basement_living
+                - climate.th1123wf_239960
+          - choose: []
+            default:
+              - action: notify.all_devices
+                metadata: {}
+                data:
+                  message: Hilo Challenge - Challenge in progress!
+          - if:
+              - condition: template
+                value_template: "{{ switch_list | length > 0 }}"
+            then:
+              - action: switch.turn_off
+                target:
+                  entity_id:
+                    - switch.air_exchanger
+                    - switch.dehumidifier_basement
+                    - switch.dehumidifier_garage
+                    - switch.heater_garage
+                    - switch.rm3500wf
+                    - switch.entrance
+                data: {}
+          - if:
+              - condition: template
+                value_template: "{{ light_list | length > 0 }}"
+            then:
+              - action: light.turn_off
+                target: {}
+                data: {}
+          - if:
+              - condition: template
+                value_template: "{{ fan_list | length > 0 }}"
+            then:
+              - action: fan.turn_off
+                target: {}
+                data: {}
+      - conditions:
+          - condition: trigger
+            id: defi_recovery
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ temperature_recovery_state }}"
+            target:
+              entity_id:
+                - climate.tstat_c5009a_lyric_t6_pro_thermostat
+                - climate.th1123wf_bd6688
+                - climate.basement_living
+                - climate.th1123wf_239960
+          - choose: []
+            default:
+              - action: notify.all_devices
+                metadata: {}
+                data:
+                  message: Hilo Challenge - Challenge completed.
+          - if:
+              - condition: template
+                value_template: "{{ switch_list | length > 0 and restart_switch | bool }}"
+            then:
+              - action: switch.turn_on
+                target:
+                  entity_id:
+                    - switch.air_exchanger
+                    - switch.dehumidifier_basement
+                    - switch.dehumidifier_garage
+                    - switch.heater_garage
+                    - switch.rm3500wf
+                    - switch.entrance
+                data: {}
+          - if:
+              - condition: template
+                value_template: "{{ light_list | length > 0 and restart_light | bool }}"
+            then:
+              - action: light.turn_on
+                target: {}
+                data: {}
+          - if:
+              - condition: template
+                value_template: "{{ fan_list | length > 0 and restart_fan | bool }}"
+            then:
+              - action: fan.turn_on
+                target: {}
+                data: {}
+      - conditions:
+          - condition: trigger
+            id: defi_completed
+        sequence:
+          - action: climate.set_temperature
+            data:
+              temperature: "{{ temperature_completed_state }}"
+            target:
+              entity_id:
+                - climate.tstat_c5009a_lyric_t6_pro_thermostat
+                - climate.th1123wf_bd6688
+                - climate.basement_living
+                - climate.th1123wf_239960
+variables:
+  temperature_pre_heat_state: 22
+  pre_heat_minutes_state: 120
+  temperature_reduction_state: 17.5
+  temperature_recovery_state: 20
+  temperature_completed_state: 20
+  thermostat_list:
+    entity_id:
+      - climate.tstat_c5009a_lyric_t6_pro_thermostat
+      - climate.th1123wf_bd6688
+      - climate.basement_living
+      - climate.th1123wf_239960
+  switch_list:
+    entity_id:
+      - switch.air_exchanger
+      - switch.dehumidifier_basement
+      - switch.dehumidifier_garage
+      - switch.heater_garage
+      - switch.rm3500wf
+      - switch.entrance
+  light_list: {}
+  fan_list: {}
+  restart_switch: true
+  restart_light: true
+  restart_fan: true
